@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-main.yaml
+  - changeSet:
+      id: 1
+      author: chervenko
+#      preConditions:
+#        - onError: CONTINUE
+#        - sqlCheck:
+#            expectedResult: 0
+#            sql: CREATE TABLE home
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: home
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(140)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: BIGINT
+
+        - createTable:
+            schemaName: public
+            tableName: person
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: age
+                  type: integer
+              - column:
+                  name: name
+                  type: varchar(25)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(140)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: home_id
+                  type: BIGINT
+              - column:
+                  name: role
+                  type: varchar(50)
+
+  - changeSet:
+      id: 2
+      author: chervenko
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: home
+            baseColumnNames: owner_id
+            constraintName: fk_owner_id
+            referencedTableName: person
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: person
+            baseColumnNames: home_id
+            constraintName: fk_home_id
+            referencedTableName: home
+            referencedColumnNames: id
+
+
+
+
